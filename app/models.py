@@ -25,7 +25,7 @@ class Submission(models.Model):
     summary = models.TextField()
     submission_file = models.FileField(upload_to='submissions/files',blank=True,null=True)
     submission_image = models.ImageField(upload_to='submissions/images',blank=True,null=True)
-    submission_link = models.URLField()
+    submission_link = models.URLField(blank=True,null=True)
     submission_date = models.DateField(auto_now_add=True)
 
     def __str__(self):

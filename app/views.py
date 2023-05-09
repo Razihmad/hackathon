@@ -40,3 +40,4 @@ class ParticipateView(APIView):
             participate.save()
             return Response({"msg":"You have been registered successfully"})
         return Response(participate.errors)
+    

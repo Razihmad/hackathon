@@ -16,6 +16,8 @@ class Hackathon(models.Model):
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
     reward_prize = models.CharField(max_length=100)
+    def __str__(self):
+        return self.title
 
 class Submission(models.Model):
     hackathon = models.ForeignKey(Hackathon, on_delete=models.CASCADE)

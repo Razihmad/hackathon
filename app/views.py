@@ -58,7 +58,7 @@ class ParticipateView(CreateAPIView):
 
 class HackathonSubmissionAPIView(ListCreateAPIView,UpdateAPIView):
     parser_classes = (MultiPartParser,FormParser)
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
     authentication_classes = [BasicAuthentication]
     serializer_class = SubmissionSerializer
     def get_queryset(self):

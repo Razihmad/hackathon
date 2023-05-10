@@ -27,7 +27,7 @@ class Submission(models.Model):
     submission_image = models.ImageField(upload_to='submissions/images',blank=True,null=True)
     submission_link = models.URLField(blank=True,null=True)
     submission_date = models.DateField(auto_now_add=True)
-
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='submitted_by')
     def __str__(self):
         return self.name
 

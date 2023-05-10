@@ -3,10 +3,10 @@ from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser,FormParser
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import HackathonSerializer,ParticipantSerializer
+from .serializers import HackathonSerializer,ParticipantSerializer,SubmissionSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly,IsAuthenticated
 from rest_framework.authentication import BasicAuthentication
-from rest_framework.generics import ListAPIView,ListCreateAPIView
+from rest_framework.generics import ListAPIView,ListCreateAPIView,CreateAPIView
 from .models import *
 import json
 # Create your views here.
@@ -27,17 +27,21 @@ class HackathonListView(ListAPIView):
     serializer_class = HackathonSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     
-
-class ParticipateView(APIView):
+class ParticipateView(CreateAPIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [BasicAuthentication]
-    def post(self,request,*args,**kwargs):
-        hId = request.data['hackathon']
-        uId = request.user.pk
-        data = {'user':uId,'hackathon':hId}
-        participate = ParticipantSerializer(data=data)
-        if(participate.is_valid()):
-            participate.save()
-            return Response({"msg":"You have been registered successfully"})
-        return Response(participate.errors)
+    serializer_class = ParticipantSerializer
+    def perform_create(self, serializer):
+        return serializer.save(user=self.request.user)
     
+
+
+class HackathonSubmissionAPIView(CreateAPIView):
+    parser_classes = (MultiPartParser,FormParser)
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    authentication_classes = [BasicAuthentication]
+    serializer_class = SubmissionSerializer
+    def perform_create(self,serializer):
+        return serializer.save(user=self.request.user)
+
+        

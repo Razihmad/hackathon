@@ -36,12 +36,14 @@ class ParticipateView(CreateAPIView):
     
 
 
-class HackathonSubmissionAPIView(CreateAPIView,UpdateAPIView):
+class HackathonSubmissionAPIView(ListCreateAPIView,UpdateAPIView):
     parser_classes = (MultiPartParser,FormParser)
     permission_classes = [IsAuthenticatedOrReadOnly]
     authentication_classes = [BasicAuthentication]
     serializer_class = SubmissionSerializer
-    queryset = Submission.objects.all()
+    def get_queryset(self):
+        obj = Submission.objects.all().filter(user=self.request.user)
+        return obj
     def perform_create(self,serializer):
         return serializer.save(user=self.request.user)
 

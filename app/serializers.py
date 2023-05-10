@@ -27,6 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class HackathonSerializer(serializers.ModelSerializer):
+    owner = serializers.PrimaryKeyRelatedField(default =  serializers.CurrentUserDefault(),queryset=User.objects.all())
     def validate(self,data):
         if(data['start_datetime']>=data['end_datetime']):
             raise serializers.ValidationError("End Date Time Must Be After Start Date Time")

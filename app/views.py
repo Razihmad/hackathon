@@ -20,16 +20,16 @@ class UserRegisterView(APIView):
         return Response(user_serialzier.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
-class HackathonAPIView(APIView):
+class HackathonAPIView(ListCreateAPIView):
     parser_classes = (MultiPartParser,FormParser)
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
     authentication_classes = [BasicAuthentication]
-    def post(self,request,*args,**kwargs):
-        hackathon_serializer = HackathonSerializer(data=request.data)
-        if(hackathon_serializer.is_valid()):
-            hackathon_serializer.save()
-            return Response({"msg":"hackathon created successfully"},status=status.HTTP_201_CREATED)
-        return Response(hackathon_serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    serializer_class = HackathonSerializer
+    def perform_create(self, serializer):
+        return serializer.save(owner=self.request.user)
+    def get_queryset(self):
+        obj = Hackathon.objects.filter(owner = self.request.user)
+        return obj
         
 class HackathonListView(ListAPIView):
     queryset = Hackathon.objects.all()

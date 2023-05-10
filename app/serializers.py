@@ -16,8 +16,7 @@ class HackathonSerializer(serializers.ModelSerializer):
 class ParticipantSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(default =  serializers.CurrentUserDefault(),queryset=User.objects.all())
     def validate(self, data):
-        hackathon = Hackathon.objects.get(title=data['hackathon'])
-        end_datetime = str(hackathon.end_datetime)
+        end_datetime = str(data['hackathon'].end_datetime)
         end_datetime = datetime.fromisoformat(end_datetime).astimezone(timezone.utc)
         curDatetime = datetime.now()
         curDatetime = str(curDatetime)
@@ -32,6 +31,16 @@ class ParticipantSerializer(serializers.ModelSerializer):
         
 class SubmissionSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(default=serializers.CurrentUserDefault(),queryset=User.objects.all())
+    def validate(self, attrs):
+        end_datetime = str(attrs['hackathon'].end_datetime)
+        end_datetime = datetime.fromisoformat(end_datetime).astimezone(timezone.utc)
+        curDatetime = datetime.now()
+        curDatetime = str(curDatetime)
+        curDatetime = datetime.fromisoformat(curDatetime).astimezone(timezone.utc)
+        if(curDatetime>end_datetime):
+            raise serializers.ValidationError("This Hackthon Submission Has Been Closed")
+        return attrs
+    
     class Meta():
         model= Submission
         fields = '__all__'

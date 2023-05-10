@@ -22,13 +22,13 @@ class UserRegisterView(APIView):
 
 class HackathonAPIView(ListCreateAPIView):
     parser_classes = (MultiPartParser,FormParser)
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     authentication_classes = [BasicAuthentication]
     serializer_class = HackathonSerializer
     def perform_create(self, serializer):
         return serializer.save(owner=self.request.user)
     def get_queryset(self):
-        obj = Hackathon.objects.filter(owner = self.request.user)
+        obj = Hackathon.objects.all()
         return obj
         
 class MyHackathonListView(APIView):
@@ -42,9 +42,15 @@ class MyHackathonListView(APIView):
         hacakthon_serilzer = HackathonSerializer(out,many=True)
         return Response(hacakthon_serilzer.data)
     
-class HackathonList(ListAPIView):
-    queryset = Hackathon.objects.all()    
-    serializer_class = HackathonSerializer
+class MyHackathonList(APIView):
+    def get(self,request,*args,**kwargs):
+        if(request.user.is_anonymous):
+            return Response({"msg":"Unauthorized"},status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            obj = Hackathon.objects.all().filter(owner=request.user)
+            serializer = HackathonSerializer(obj,many=True)
+            return Response(serializer.data,status=status.HTTP_200_OK)
+
     
     
 class ParticipateView(CreateAPIView):

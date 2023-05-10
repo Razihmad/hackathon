@@ -31,10 +31,21 @@ class HackathonAPIView(ListCreateAPIView):
         obj = Hackathon.objects.filter(owner = self.request.user)
         return obj
         
-class HackathonListView(ListAPIView):
-    queryset = Hackathon.objects.all()
+class MyHackathonListView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [BasicAuthentication]
+    def get(self,request,*args,**kwargs):
+        out = []
+        temp = Participant.objects.filter(user=request.user)
+        for i in temp:
+            out.append(i.hackathon)
+        hacakthon_serilzer = HackathonSerializer(out,many=True)
+        return Response(hacakthon_serilzer.data)
+    
+class HackathonList(ListAPIView):
+    queryset = Hackathon.objects.all()    
     serializer_class = HackathonSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    
     
 class ParticipateView(CreateAPIView):
     permission_classes = [IsAuthenticated]

@@ -6,7 +6,7 @@ from rest_framework import status
 from .serializers import HackathonSerializer,ParticipantSerializer,SubmissionSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly,IsAuthenticated
 from rest_framework.authentication import BasicAuthentication
-from rest_framework.generics import ListAPIView,ListCreateAPIView,CreateAPIView
+from rest_framework.generics import ListAPIView,ListCreateAPIView,CreateAPIView,UpdateAPIView
 from .models import *
 import json
 # Create your views here.
@@ -36,11 +36,12 @@ class ParticipateView(CreateAPIView):
     
 
 
-class HackathonSubmissionAPIView(CreateAPIView):
+class HackathonSubmissionAPIView(CreateAPIView,UpdateAPIView):
     parser_classes = (MultiPartParser,FormParser)
     permission_classes = [IsAuthenticatedOrReadOnly]
     authentication_classes = [BasicAuthentication]
     serializer_class = SubmissionSerializer
+    queryset = Submission.objects.all()
     def perform_create(self,serializer):
         return serializer.save(user=self.request.user)
 

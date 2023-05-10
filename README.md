@@ -7,9 +7,9 @@ All endpoints in the submissions app require authentication. Users must include 
 
 #API Endpoints
 
-#Create Hackathon
-#Endpoint: /api/hackathons/
-#HTTP Method: POST
+Create Hackathon
+Endpoint: /api/hackathons/
+HTTP Method: POST
 
 
 #Request Parameters:
@@ -106,7 +106,7 @@ All endpoints in the submissions app require authentication. Users must include 
     
   
 #List Enrolled Hackathons
-#Endpoint: /api/users/{user_id}/enrolled_hackathons
+#Endpoint: /api/users/enrolled_hackathons/
 #HTTP Method: GET
 
 #Response Parameters:
@@ -124,7 +124,7 @@ All endpoints in the submissions app require authentication. Users must include 
 
 
 #List User Submissions
-#Endpoint: /api/users/{user_id}/submissions
+#Endpoint: /api/users/submissions/
 #HTTP Method: GET
 
 #Response Parameters:
@@ -142,10 +142,10 @@ All endpoints in the submissions app require authentication. Users must include 
 #HTTP Method: POST
 
 #Request parameter
-    username: username of your choice
-    email: your email
-    password: password
-    paswword2: should be same as password
+            username: username of your choice
+            email: your email
+            password: password
+            paswword2: should be same as password
    
 
 

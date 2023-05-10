@@ -7,4 +7,5 @@ urlpatterns = [
     path('participate/',views.ParticipateView.as_view(),name="participateView"),
     path('submission/',views.HackathonSubmissionAPIView.as_view(),name='submission'),
     path('submission/<int:pk>/',views.HackathonSubmissionAPIView.as_view(),name='UpdateSubmission'),
+    path('register/',views.UserRegisterView.as_view(),name="RegisterUser"),
 ]

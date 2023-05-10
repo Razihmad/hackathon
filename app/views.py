@@ -3,13 +3,22 @@ from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser,FormParser
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import HackathonSerializer,ParticipantSerializer,SubmissionSerializer
+from .serializers import HackathonSerializer,ParticipantSerializer,SubmissionSerializer,UserSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly,IsAuthenticated
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.generics import ListAPIView,ListCreateAPIView,CreateAPIView,UpdateAPIView
 from .models import *
 import json
 # Create your views here.
+
+class UserRegisterView(APIView):
+    def post(self,request,*args,**kwargs):
+        user_serialzier = UserSerializer(data=request.data)
+        if(user_serialzier.is_valid()):
+            user_serialzier.save()
+            return Response({"msg":"You have been registered successfully"},status=status.HTTP_201_CREATED)
+        return Response(user_serialzier.errors,status=status.HTTP_400_BAD_REQUEST)
+
 
 class HackathonAPIView(APIView):
     parser_classes = (MultiPartParser,FormParser)

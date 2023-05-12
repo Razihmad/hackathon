@@ -147,10 +147,3 @@ HTTP Method: POST
             password: password
             paswword2: should be same as password
    
-
-
-
-
-Conclusion
-That's it for the API documentation for the submissions app! You can use this as a starting point and expand upon it as needed. 
-Don't forget to include information on the data models, API response codes, and other important information that developers may need to know. Good luck!
